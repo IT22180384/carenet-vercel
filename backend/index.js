@@ -12,11 +12,9 @@ app.use(express.json());
 
 //const Images = mongoose.model("productModel");
 
-
 app.use(cors({
-    origin: ['http://localhost:3000', ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
 app.get('/', (request, response) => {
