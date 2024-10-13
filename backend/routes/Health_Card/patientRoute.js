@@ -97,7 +97,13 @@ router.delete('/patients/:U_id', async (req, res) => {
 // New route to get a patient by U_id
 router.get('/patients/:U_id', async (req, res) => {
     try {
-        const patient = await Patient.findOne({ U_id: req.params.U_id });
+        const { U_id } = req.params;
+        console.log('Searching for patient with U_id:', U_id); // Add this log
+
+        const patient = await Patient.findOne({ U_id: U_id });
+
+        console.log('Found patient:', patient); // Add this log
+
         if (!patient) {
             return res.status(404).json({ message: 'Patient not found' });
         }
