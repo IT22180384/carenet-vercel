@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
+import { useNavigate } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { FiDownload } from 'react-icons/fi'; // For download icon
@@ -20,17 +20,15 @@ const QR_Generator = () => {
         emergencyContact: '',
     });
 
+    const [generatedId, setGeneratedId] = useState('');
     const qrRef = useRef(); // To reference the QR code element
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
-    };
-
-    const generateQRCodeData = () => {
-        return JSON.stringify(formData);
     };
 
     const handleSubmit = async (e) => {
@@ -47,21 +45,8 @@ const QR_Generator = () => {
             const data = await response.json();
             if (response.ok) {
                 console.log('Patient registered:', data.patient);
-                alert('Patient registered successfully! QR Code generated.');
-                setFormData({
-                    firstName: '',
-                    lastName: '',
-                    dob: '',
-                    gender: 'Male',
-                    email: '',
-                    phone: '',
-                    address: '',
-                    insuranceNumber: '',
-                    physician: '',
-                    medicalHistory: '',
-                    bloodType: '',
-                    emergencyContact: '',
-                });
+                alert(`Patient registered successfully! Unique ID: ${data.patient.U_id}`);
+                navigate(`/generate-qr/${data.patient.U_id}`);
             } else {
                 alert(`Error: ${data.message}`);
             }
@@ -70,22 +55,13 @@ const QR_Generator = () => {
             alert('An error occurred while registering the patient.');
         }
     };
-
-    // Function to download the QR code as a PDF
-    const downloadQRCodePDF = async () => {
-        const canvas = await html2canvas(qrRef.current); // Capture the QR code
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, 'PNG', 10, 10, 180, 180); // Adjust size and position of the QR code in the PDF
-        pdf.save(`${formData.firstName}_${formData.lastName}_QRCode.pdf`); // Save as PDF
-    };
-
     return (
         <div className="bg-white flex flex-col lg:flex-row items-start justify-center gap-6">
             {/* Left Card: Registration Form */}
             <div className="bg-white shadow-lg rounded-lg p-4 w-full lg:w-3/5">
                 <h1 className="text-2xl font-bold text-center text-green-600 mb-4">Patient Registration</h1>
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
+
                     {/* Personal Information */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">First Name</label>
@@ -246,20 +222,6 @@ const QR_Generator = () => {
                 </form>
             </div>
 
-            {/* Right Card: QR Code Display */}
-            <div className="bg-white shadow-lg rounded-lg p-4 w-full lg:w-2/5 mt-6 lg:mt-0 flex flex-col justify-center items-center">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">Generated QR Code</h2>
-                <div className="border p-4 bg-gray-50 rounded-lg" ref={qrRef}>
-                    <QRCodeCanvas value={generateQRCodeData()} size={200} />
-                </div>
-                {/* Download Button */}
-                <button
-                    className="flex items-center bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 hover:bg-green-700 transition duration-200"
-                    onClick={downloadQRCodePDF}
-                >
-                    <FiDownload className="mr-2" /> Download QR Code
-                </button>
-            </div>
         </div>
     );
 };

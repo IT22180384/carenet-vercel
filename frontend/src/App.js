@@ -8,6 +8,7 @@ import QR_Page from "./pages/HealthCard_Pages/QR_Page";
 import RegPage from "./pages/HealthCard_Pages/regPage"; // Renamed to RegPage
 
 import Patients from "./pages/Admin/Patients";
+import GenerateQR from "./pages/HealthCard_Pages/GenerateQR";
 
 export default function App() {
     const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ export default function App() {
                 <Route path="/QR_Scanner/home" element={<QR_Page />} />
                 <Route path="/signup/register" element={<RegPage />} /> {/* Updated here */}
                 <Route path="/patients/home" element={<Patients />} />
+                <Route path="/generate-qr/:id" element={<GenerateQR />} />
             </Routes>
         </div>
     );

@@ -8,6 +8,17 @@ const router = express.Router();
 // Enable CORS for all routes
 router.use(cors());
 
+// Function to generate a unique 16-digit ID
+const generateUniqueId = async () => {
+    while (true) {
+        const id = Math.floor(1000000000000000 + Math.random() * 9000000000000000).toString();
+        const existingPatient = await Patient.findOne({ U_id: id });
+        if (!existingPatient) {
+            return id;
+        }
+    }
+};
+
 // Create a new patient and return QR code data
 router.post('/', async (req, res) => {
     try {
@@ -26,9 +37,12 @@ router.post('/', async (req, res) => {
             });
         }
 
+        // Generate a unique U_id
+        const U_id = await generateUniqueId();
+
         // Create a new patient
         const newPatient = await Patient.create({
-            firstName, lastName, dob, gender, email, phone,
+            U_id, firstName, lastName, dob, gender, email, phone,
             address, insuranceNumber, physician, medicalHistory,
             bloodType, emergencyContact
         });
@@ -59,8 +73,6 @@ router.get('/patients', async (req, res) => {
     }
 });
 
-
-//delete the patient
 // DELETE route for deleting a patient by ID
 router.delete('/patients/:id', async (req, res) => {
     const { id } = req.params;
@@ -81,7 +93,6 @@ router.delete('/patients/:id', async (req, res) => {
     }
 });
 
-
 // Update a patient by ID
 router.put('/patients/:id', async (req, res) => {
     console.log('Updating patient ID:', req.params.id);
@@ -98,10 +109,5 @@ router.put('/patients/:id', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 });
-
-
-
-
-
 
 export default router;

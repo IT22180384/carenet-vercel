@@ -3,6 +3,10 @@ import mongoose from 'mongoose';
 // Define Product Schema
 const patientSchema = new mongoose.Schema(
     {
+        U_id: {
+            type: String,
+            required: true,
+        },
         firstName: {
             type: String,
             required: true,
