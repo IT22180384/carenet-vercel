@@ -80,10 +80,12 @@ router.delete('/patients/:U_id', async (req, res) => {
     try {
         const deletedPatient = await Patient.findOneAndDelete({ U_id });
 
+        // Check if a patient was found and deleted
         if (!deletedPatient) {
             return res.status(404).json({ message: "Patient not found" });
         }
 
+        // Respond with success message
         res.status(200).json({ message: "Patient deleted successfully" });
     } catch (error) {
         console.error("Error deleting patient:", error);
