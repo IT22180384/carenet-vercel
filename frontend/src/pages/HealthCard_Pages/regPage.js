@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { SnackbarProvider } from "notistack";
-import SideBar from "../../components/SideBar";
-import Navbar from "../../components/utility/Navbar";
-import Breadcrumb from "../../components/utility/Breadcrumbs";
-import BackButton from "../../components/utility/BackButton";
 import QR_Generator from "../../components/Health_Card/QR_Generator";
 
 export default function RegPage() { // Changed from regPage to RegPage
     const [loading, setLoading] = useState(false);
     const [currentTile, setCurrentTile] = useState(1);
-
 
 
     useEffect(() => {
@@ -32,7 +27,7 @@ export default function RegPage() { // Changed from regPage to RegPage
                     </div>
                     <div className="w-full sm:w-5/6 flex flex-col p-4 mt-1 sm:mt-0">
 
-                        <QR_Generator />
+                        <QR_Generator/>
                     </div>
                 </div>
             </div>

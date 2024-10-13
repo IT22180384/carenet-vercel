@@ -93,6 +93,20 @@ router.delete('/patients/:id', async (req, res) => {
     }
 });
 
+// New route to get a patient by U_id
+router.get('/patients/:U_id', async (req, res) => {
+    try {
+        const patient = await Patient.findOne({ U_id: req.params.U_id });
+        if (!patient) {
+            return res.status(404).json({ message: 'Patient not found' });
+        }
+        res.json(patient);
+    } catch (error) {
+        console.error('Error fetching patient:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Update a patient by ID
 router.put('/patients/:id', async (req, res) => {
     console.log('Updating patient ID:', req.params.id);

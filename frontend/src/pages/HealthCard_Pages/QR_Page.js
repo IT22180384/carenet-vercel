@@ -4,16 +4,18 @@ import SideBar from "../../components/SideBar";
 import Navbar from "../../components/utility/Navbar";
 import Breadcrumb from "../../components/utility/Breadcrumbs";
 import BackButton from "../../components/utility/BackButton";
-import QRScanner from "../../components/Health_Card/QRScanner"; // Import QRScanner
+import QRScanner from "../../components/Health_Card/QRScanner";
 import { MdQrCodeScanner } from "react-icons/md";
+import Details from "../../components/Health_Card/Details";
 
 export default function QR_Page() {
     const [loading, setLoading] = useState(false);
     const [currentTile, setCurrentTile] = useState(1);
-    const [showScanner, setShowScanner] = useState(false); // State to toggle scanner
+    const [showScanner, setShowScanner] = useState(false);
     const [cameras, setCameras] = useState([]);
     const [selectedCamera, setSelectedCamera] = useState(null);
     const [hasCameraPermission, setHasCameraPermission] = useState(false);
+    const [userData, setUserData] = useState(null);
 
     const breadcrumbItems = [
         { name: 'QR Scanner', href: '/QR_Scanner/home' }
@@ -53,8 +55,14 @@ export default function QR_Page() {
     const handleScanButtonClick = async () => {
         await requestCameraPermission();
         if (hasCameraPermission) {
-            setShowScanner(true); // Show scanner if permission granted
+            setShowScanner(true);
+            setUserData(null);
         }
+    };
+
+    const handleUserDataScanned = (data) => {
+        setUserData(data);
+        setShowScanner(false); // Hide scanner after successful scan
     };
 
     return (
@@ -75,7 +83,7 @@ export default function QR_Page() {
                         <div className="flex justify-start mb-4">
                             <button
                                 className="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md focus:outline-none ml-10"
-                                onClick={handleScanButtonClick} // Trigger the scan button
+                                onClick={handleScanButtonClick}
                             >
                                 <MdQrCodeScanner className="mr-2" size={20} />
                                 <span className="text-sm sm:text-base">Scan QR</span>
@@ -83,8 +91,13 @@ export default function QR_Page() {
                         </div>
 
                         {showScanner && hasCameraPermission && (
-                            <QRScanner selectedCamera={selectedCamera} /> // Render QRScanner if showScanner is true
+                            <QRScanner
+                                selectedCamera={selectedCamera}
+                                onUserDataScanned={handleUserDataScanned}
+                            />
                         )}
+
+                        {userData && <Details user={userData} />}
                     </div>
                 </div>
             </div>
