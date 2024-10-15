@@ -30,7 +30,7 @@ const PaymentPage = () => {
         };
 
         try {
-            const response = await fetch('https://carenet-vercel-git-main-sandanimas-projects.vercel.app/paymentRoute/payment', {
+            const response = await fetch('https://carenet-vercel.vercel.app/paymentRoute/payment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

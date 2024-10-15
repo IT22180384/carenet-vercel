@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
-import { PatientData } from '../Vinuk/Data/PatientData'; // Import the data
+import { PatientData } from './Data/PatientData'; // Import the data
 
 Chart.register(...registerables);
 

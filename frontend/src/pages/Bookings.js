@@ -34,7 +34,7 @@ const Bookings = () => {
     setLoading(true);
     try {
       const response = await fetch(
-          "https://carenet-vercel-git-main-sandanimas-projects.vercel.app/appointmentRoute/appointments"
+          "https://carenet-vercel.vercel.app/appointmentRoute/appointments"
       );
       if (!response.ok) throw new Error("Failed to fetch bookings");
       const data = await response.json();
@@ -50,7 +50,7 @@ const Bookings = () => {
 
   const fetchDoctors = async () => {
     try {
-      const response = await fetch("https://carenet-vercel-git-main-sandanimas-projects.vercel.app/doctorRoute/");
+      const response = await fetch("https://carenet-vercel.vercel.app/doctorRoute/");
       if (!response.ok) throw new Error("Failed to fetch doctors");
       const data = await response.json();
       setDoctors(data);
@@ -69,7 +69,7 @@ const Bookings = () => {
     if (window.confirm("Are you sure you want to delete this booking?")) {
       try {
         const response = await fetch(
-            `https://carenet-vercel-git-main-sandanimas-projects.vercel.app/appointmentRoute/appointments/${id}`,
+            `https://carenet-vercel.vercel.app/appointmentRoute/appointments/${id}`,
             {
               method: "DELETE",
             }
@@ -97,7 +97,7 @@ const Bookings = () => {
   const handleUpdate = async (updatedData) => {
     try {
       const response = await fetch(
-          `https://carenet-vercel-git-main-sandanimas-projects.vercel.app/appointmentRoute/appointments/${currentAppointment._id}`,
+          `https://carenet-vercel.vercel.app/appointmentRoute/appointments/${currentAppointment._id}`,
           {
             method: "PUT",
             headers: {

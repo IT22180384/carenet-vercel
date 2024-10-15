@@ -26,7 +26,7 @@ const AddAppointment = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch("https://carenet-vercel-git-main-sandanimas-projects.vercel.app/doctorRoute/");
+        const response = await fetch("https://carenet-vercel.vercel.app/doctorRoute/");
         if (!response.ok) throw new Error("Failed to fetch doctors");
         const data = await response.json();
         setDoctors(data); // Set doctors in state
@@ -75,7 +75,7 @@ const AddAppointment = () => {
     if (validateForm()) {
       try {
         const response = await fetch(
-          "https://carenet-vercel-git-main-sandanimas-projects.vercel.app/appointmentRoute/",
+          "https://carenet-vercel.vercel.app/appointmentRoute/",
           {
             method: "POST",
             headers: {

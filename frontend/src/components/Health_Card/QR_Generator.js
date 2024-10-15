@@ -29,7 +29,7 @@ const QR_Generator = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('https://carenet-vercel-git-main-sandanimas-projects.vercel.app/patientRoute', {
+            const response = await fetch('https://carenet-vercel.vercel.app/patientRoute', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
