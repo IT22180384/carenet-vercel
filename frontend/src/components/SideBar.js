@@ -18,7 +18,7 @@ const Sidebar = () => {
 
     const Menus = [
         { name: "Profile", path: "/profile", icon: CgProfile },
-        { name: "Services", path: "/services/home", icon: MdOutlineMedicalServices  },
+        { name: "Services", path: "/serviceView", icon: MdOutlineMedicalServices  },
         { name: "Bookings", path: "/bookings/home", icon: IoCalendarOutline },
         { name: "Home", path: "/dashboard", icon: HomeIcon },
         { name: "Finances", path: "/finances/home", icon: BanknotesIcon },
@@ -56,9 +56,9 @@ const Sidebar = () => {
                         {Menus.map((menu, index) => (
                             <Link to={menu.path} key={index}>
                                 <li
-                                    className={`flex rounded-md p-4 cursor-pointer text-gray-800 font-semibold text-md items-center gap-x-4 focus:outline-none focus:ring focus:ring-lime-500 transition-all duration-200 px-1 hover:bg-gray-200 hover:rounded-xl hover:shadow-xl
+                                    className={`flex rounded-md p-4 cursor-pointer text-gray-800 font-semibold text-md items-center gap-x-4 focus:outline-none focus:ring focus:ring-blue-500 transition-all duration-200 px-1 hover:bg-gray-200 hover:rounded-xl hover:shadow-xl
                         ${menu.gap ? "mt-9" : "mt-2"} ${
-                                        isActive(menu.path) && "bg-gray-200 text-lime-700 rounded-xl px-3 shadow-xl"
+                                        isActive(menu.path) && "bg-gray-200 text-blue-700 rounded-xl px-3 shadow-xl"
                                     }`}
                                 >
                                     {React.createElement(menu.icon, { className: 'w-5 h-5 ml-2' })}
@@ -79,7 +79,7 @@ const Sidebar = () => {
                 {/* Logout Button */}
                 <div className="pb-16">
                     <li
-                        className={`flex rounded-md p-4 cursor-pointer text-gray-800 font-semibold text-md items-center gap-x-4 focus:outline-none focus:ring focus:ring-lime-500 transition-all duration-200 px-1 hover:bg-red-100 hover:text-red-700 hover:rounded-xl hover:shadow-xl ${
+                        className={`flex rounded-md p-4 cursor-pointer text-gray-800 font-semibold text-md items-center gap-x-4 focus:outline-none focus:ring focus:ring-blue-500 transition-all duration-200 px-1 hover:bg-red-100 hover:text-red-700 hover:rounded-xl hover:shadow-xl ${
                             open ? "justify-start" : "justify-center"
                         }`}
                         onClick={() => {

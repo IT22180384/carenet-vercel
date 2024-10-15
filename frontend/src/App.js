@@ -10,6 +10,19 @@ import RegPage from "./pages/HealthCard_Pages/regPage"; // Renamed to RegPage
 import Patients from "./pages/Admin/Patients";
 import GenerateQR from "./pages/HealthCard_Pages/GenerateQR";
 
+import Appointments from "./pages/Appointments";
+import Services from "./pages/Services";
+
+import Doctors from "./pages/Doctors";
+
+import ServiceView from "./pages/ServiceView";
+
+import AddAppointment from "./pages/AddAppointment";
+
+import ProfilePage from "./pages/ProfilePage";
+import Bookings from "./pages/Bookings";
+
+
 export default function App() {
     const [loading, setLoading] = useState(true);
 
@@ -28,11 +41,23 @@ export default function App() {
                 {/* Dashboard route */}
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/signUp" element={<SignUpPage />} />
                 <Route path="/QR_Scanner/home" element={<QR_Page />} />
-                <Route path="/signup/register" element={<RegPage />} /> {/* Updated here */}
+                <Route path="/signup/register" element={<RegPage />} />{" "}
+                {/* Updated here */}
                 <Route path="/patients/home" element={<Patients />} />
                 <Route path="/generate-qr/:id" element={<GenerateQR />} />
+                <Route path="/appointments/home" element={<Appointments />} />
+                <Route path="/services/home" element={<Services />} />
+
+                <Route path="/DoctorsNames" element={<Doctors />} />
+
+                <Route path="/ServiceView" element={<ServiceView />} />
+                <Route path="/add-appointment" element={<AddAppointment />} />
+                <Route path="/bookings/home" element={<Bookings />} />
+                <Route path="/generate-qr/:id" element={<GenerateQR />} />
+
             </Routes>
         </div>
     );

@@ -2,7 +2,7 @@ import { CalendarDaysIcon, HandRaisedIcon } from '@heroicons/react/24/outline'
 
 export default function Subscribe_newsletter() {
     return (
-        <div className=" bg-lime-100 py-6 sm:py-24 lg:py-6">
+        <div className=" bg-blue-100 py-6 sm:py-24 lg:py-6">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8  lg:max-w-none lg:grid-cols-2">
                     <div className="max-w-xl lg:max-w-lg gap-y-4">
@@ -20,12 +20,12 @@ export default function Subscribe_newsletter() {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="min-w-0 flex-auto rounded-full border-0 bg-white px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-lime-500 sm:text-sm sm:leading-6"
+                                className="min-w-0 flex-auto rounded-full border-0 bg-white px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6"
                                 placeholder="Enter your email"
                             />
                             <button
                                 type="submit"
-                                className="flex-none rounded-full bg-emerald-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
+                                className="flex-none rounded-full bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
                             >
                                 Subscribe
                             </button>

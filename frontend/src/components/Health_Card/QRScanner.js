@@ -14,7 +14,18 @@ const QRScanner = ({ selectedCamera, onUserDataScanned }) => {
             return;
         }
 
-        const U_id = typeof data === 'string' ? data : data.text;
+        // Assuming data is a JSON string, parse it to extract U_id
+        let parsedData;
+        try {
+            parsedData = JSON.parse(data);  // Parses the JSON string
+        } catch (error) {
+            console.error("Failed to parse QR data:", error);
+            setError("Invalid QR code format.");
+            return;
+        }
+
+        const U_id = parsedData.U_id;
+        console.log("Sending id to backend", U_id);
 
         if (U_id) {
             setScanResult(U_id);
@@ -24,8 +35,10 @@ const QRScanner = ({ selectedCamera, onUserDataScanned }) => {
             while (retryCount < maxRetries) {
                 try {
                     console.log("Fetching patient data...");
-                    const response = await axios.get(`https://carenet-vercel-git-main-sandanimas-projects.vercel.app/patientRoute/patients/${U_id}`);
+                    console.log(U_id);
+                    const response = await axios.get('https://carenet-vercel-git-main-sandanimas-projects.vercel.app/patientRoute/patients/${U_id}');
                     console.log("Patient data received:", response.data);
+                    console.log(response.data);
                     setUserData(response.data);
                     setSuccess("Patient data fetched successfully!");
                     onUserDataScanned(response.data);
@@ -37,7 +50,7 @@ const QRScanner = ({ selectedCamera, onUserDataScanned }) => {
                     if (retryCount >= maxRetries) {
                         let errorMessage = "Unknown error occurred";
                         if (err.response) {
-                            errorMessage = `Server Error: ${err.response.status} - ${err.response.statusText}`;
+                            errorMessage = 'Server Error: ${err.response.status} - ${err.response.statusText}';
                             if (err.response.data && err.response.data.message) {
                                 errorMessage += ` - ${err.response.data.message}`;
                             }
@@ -46,11 +59,11 @@ const QRScanner = ({ selectedCamera, onUserDataScanned }) => {
                         } else {
                             errorMessage = err.message;
                         }
-                        setError(`Error processing patient data: ${errorMessage}`);
+                        setError('Error processing patient data: ${errorMessage}');
                         break;
                     } else {
-                        console.log(`Retrying... (${retryCount})`);
-                        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+                        console.log('Retrying... (${retryCount})');
+                        await new Promise(resolve => setTimeout(resolve, 1000));  // Wait 1 second before retrying
                     }
                 }
             }

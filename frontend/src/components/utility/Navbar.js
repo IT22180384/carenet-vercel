@@ -25,17 +25,19 @@ export default function Navbar() {
                 {/* Center part of the navbar - visible on desktop, hidden on mobile */}
                 <div className="hidden lg:flex space-x-6">
                     <Link to="/" className="nav-item">
-                        <div className="h-full font-medium px-6 rounded-full transition-all duration-200 hover:bg-lime-200">
+                        <div className="h-full font-medium px-6 rounded-full transition-all duration-200 hover:bg-blue-200">
                             Home
                         </div>
                     </Link>
                     <Link to="/dashboard" className="nav-item">
-                        <div className="h-full font-medium px-6 rounded-full transition-all duration-200 hover:bg-lime-200">
+                        <div className="h-full font-medium px-6 rounded-full transition-all duration-200 hover:bg-blue-200">
                             Dashboard
                         </div>
                     </Link>
-                    <Link to="/tourism" className="nav-item">
-                        <div className="h-full font-medium px-6 rounded-full transition-all duration-200 hover:bg-lime-200">
+
+                    <Link to="/serviceView" className="nav-item">
+                        <div className="h-full font-medium px-6 rounded-full transition-all duration-200 hover:bg-blue-200">
+
                             Services
                         </div>
                     </Link>
@@ -45,14 +47,14 @@ export default function Navbar() {
                 <div className="flex lg:flex-1 justify-end space-x-3">
                     {/* Login button - visible on desktop, hidden on mobile */}
                     <Link to="/login" className="hidden lg:block nav-item">
-                        <div className="px-3 py-1 border border-lime-500 text-sm leading-4 font-medium rounded-full text-black transition-all duration-200 hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500">
+                        <div className="px-3 py-1 border border-blue-500 text-sm leading-4 font-medium rounded-full text-black transition-all duration-200 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Login
                         </div>
                     </Link>
 
                     {/* Sign Up button - visible on desktop, hidden on mobile */}
                     <Link to="/signup" className="hidden lg:block nav-item">
-                        <div className="px-3 py-1 border border-lime-500 bg-lime-500 text-sm leading-4 font-medium rounded-full text-white transition-all duration-200 hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500">
+                        <div className="px-3 py-1 border border-blue-500 bg-blue-500 text-sm leading-4 font-medium rounded-full text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Sign Up
                         </div>
                     </Link>
@@ -79,7 +81,7 @@ export default function Navbar() {
                     <div className="space-y-1 px-2 pb-3 pt-2">
                         <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Home</Link>
                         <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Dashboard</Link>
-                        <Link to="/tourism" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Services</Link>
+                        <Link to="/serviceView" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Services</Link>
                         <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Login</Link>
                         <Link to="/signUp" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Sign Up</Link>
                     </div>
