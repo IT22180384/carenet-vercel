@@ -28,7 +28,7 @@ const AppointmentChart = () => {
     const fetchAppointments = async () => {
       try {
         const response = await fetch(
-          "https://carenet-vercel.vercel.app/appointmentRoute/appointments"
+          "https://health-care-system-csse.vercel.app/appointmentRoute/appointments"
         );
         const appointments = await response.json();
         const hourlyCounts = processAppointmentsByHour(appointments);

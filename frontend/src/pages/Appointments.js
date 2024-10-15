@@ -37,7 +37,7 @@ const Appointments = () => {
     setLoading(true);
     try {
       const response = await fetch(
-          "https://carenet-vercel.vercel.app/appointmentRoute/appointments"
+          "https://health-care-system-csse.vercel.app/appointmentRoute/appointments"
       );
       if (!response.ok) throw new Error("Failed to fetch appointments");
       const data = await response.json();
@@ -53,7 +53,7 @@ const Appointments = () => {
 
   const fetchDoctors = async () => {
     try {
-      const response = await fetch("https://carenet-vercel.vercel.app/doctorRoute/");
+      const response = await fetch("https://health-care-system-csse.vercel.app/doctorRoute/");
       if (!response.ok) throw new Error("Failed to fetch doctors");
       const data = await response.json();
       setDoctors(data);
@@ -72,7 +72,7 @@ const Appointments = () => {
     if (window.confirm("Are you sure you want to delete this appointment?")) {
       try {
         const response = await fetch(
-            `https://carenet-vercel.vercel.app/appointmentRoute/appointments/${id}`,
+            `https://health-care-system-csse.vercel.app/appointmentRoute/appointments/${id}`,
             {
               method: "DELETE",
             }
@@ -100,7 +100,7 @@ const Appointments = () => {
   const handleUpdate = async (updatedData) => {
     try {
       const response = await fetch(
-          `https://carenet-vercel.vercel.app/appointmentRoute/appointments/${currentAppointment._id}`,
+          `https://health-care-system-csse.vercel.app/appointmentRoute/appointments/${currentAppointment._id}`,
           {
             method: "PUT",
             headers: {

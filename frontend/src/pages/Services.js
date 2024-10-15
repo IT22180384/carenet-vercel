@@ -19,7 +19,7 @@ const Services = () => {
     const fetchServices = async () => {
       setLoading(true);
       try {
-        const response = await fetch("https://carenet-vercel.vercel.app/serviceRoute/");
+        const response = await fetch("https://health-care-system-csse.vercel.app/serviceRoute/");
         if (!response.ok) throw new Error("Failed to fetch services");
         const data = await response.json();
         setServices(data);
@@ -46,7 +46,7 @@ const Services = () => {
   const handleServiceUpdate = async (updatedService) => {
     try {
       const response = await fetch(
-          `https://carenet-vercel.vercel.app/serviceRoute/${selectedService._id}`,
+          `https://health-care-system-csse.vercel.app/serviceRoute/${selectedService._id}`,
           {
             method: "PUT",
             headers: {
@@ -76,7 +76,7 @@ const Services = () => {
     if (window.confirm("Are you sure you want to delete this service?")) {
       try {
         const response = await fetch(
-            `https://carenet-vercel.vercel.app/serviceRoute/${serviceId}`,
+            `https://health-care-system-csse.vercel.app/serviceRoute/${serviceId}`,
             {
               method: "DELETE",
             }

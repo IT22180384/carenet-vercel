@@ -36,7 +36,7 @@ const QRScanner = ({ selectedCamera, onUserDataScanned }) => {
                 try {
                     console.log("Fetching patient data...");
                     console.log(U_id);
-                    const response = await axios.get('https://carenet-vercel.vercel.app/patientRoute/patients/${U_id}');
+                    const response = await axios.get('https://health-care-system-csse.vercel.app/patientRoute/patients/${U_id}');
                     console.log("Patient data received:", response.data);
                     console.log(response.data);
                     setUserData(response.data);
