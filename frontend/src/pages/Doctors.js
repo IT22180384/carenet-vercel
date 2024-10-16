@@ -19,7 +19,7 @@ export default function Doctors() {
     useEffect(() => {
         const fetchDoctors = async () => {
             try {
-                const response = await fetch("https://health-care-system-csse.vercel.app/doctorRoute/");
+                const response = await fetch("https://carenet-vercel.vercel.app/doctorRoute/");
                 const data = await response.json();
                 setDoctors(data);
                 setFilteredDoctors(data); // Set the filtered list initially

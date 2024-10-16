@@ -26,7 +26,7 @@ const Patients = () => {
     const fetchPatients = async () => {
         setLoading(true);
         try {
-            const response = await fetch('https://carenet-vercel-git-main-sandanimas-projects.vercel.app/patientRoute/patients');
+            const response = await fetch('https://carenet-vercel.vercel.app/patientRoute/patients');
             if (!response.ok) throw new Error('Failed to fetch patients');
             const data = await response.json();
             setPatients(data);
@@ -42,7 +42,7 @@ const Patients = () => {
         if (window.confirm('Are you sure you want to delete this patient?')) {
             try {
                 // Make a DELETE request to the backend using the U_id
-                const response = await fetch(`https://carenet-vercel-git-main-sandanimas-projects.vercel.app/patientRoute/patients/${U_id}`, {
+                const response = await fetch(`https://carenet-vercel.vercel.app/patientRoute/patients/${U_id}`, {
                     method: 'DELETE',
                 });
 
@@ -72,7 +72,7 @@ const Patients = () => {
 
     const handleUpdate = async (updatedData) => {
         try {
-            const response = await fetch(`https://carenet-vercel-git-main-sandanimas-projects.vercel.app/patientRoute/patients/${currentPatient.U_id}`, {
+            const response = await fetch(`https://carenet-vercel.vercel.app/patientRoute/patients/${currentPatient.U_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

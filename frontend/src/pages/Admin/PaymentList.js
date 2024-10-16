@@ -18,7 +18,7 @@ const PaymentList = () => {
         const fetchPayments = async () => {
             setLoading(true);
             try {
-                const response = await fetch('https://carenet-vercel-git-main-sandanimas-projects.vercel.app/paymentRoute/payments');
+                const response = await fetch('https://carenet-vercel.vercel.app/paymentRoute/payments');
                 if (!response.ok) throw new Error('Failed to fetch payments');
                 const data = await response.json();
                 setPayments(data);

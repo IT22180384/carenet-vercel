@@ -16,7 +16,7 @@ const ServiceView = () => {
     const fetchServices = async () => {
       setLoading(true);
       try {
-        const response = await fetch("https://health-care-system-csse.vercel.app/serviceRoute/");
+        const response = await fetch("https://carenet-vercel.vercel.app/serviceRoute/");
         if (!response.ok) throw new Error("Failed to fetch services");
         const data = await response.json();
         setServices(data);
