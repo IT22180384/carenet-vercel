@@ -123,5 +123,4 @@ const QRScanner = ({ selectedCamera, onUserDataScanned }) => {
         </div>
     );
 };
-
 export default QRScanner;
