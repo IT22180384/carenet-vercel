@@ -54,7 +54,11 @@ const patientSchema = new mongoose.Schema(
         emergencyContact: {
             type: String,
             required: true,
-        }
+        },
+         firebaseUid: {
+            type: String,
+            required: false,
+        },
     },
     {
         timestamps: true, // Adds createdAt and updatedAt timestamps
