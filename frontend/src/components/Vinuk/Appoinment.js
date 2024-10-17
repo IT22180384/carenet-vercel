@@ -138,4 +138,5 @@ const AppointmentChart = () => {
     </div>
   );
 };
+
 export default AppointmentChart;
