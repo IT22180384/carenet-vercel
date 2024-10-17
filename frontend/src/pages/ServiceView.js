@@ -100,5 +100,4 @@ const ServiceView = () => {
       </div>
   );
 };
-
 export default ServiceView;
