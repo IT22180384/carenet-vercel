@@ -8,21 +8,26 @@ const SignUpPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const navigate = useNavigate(); // Initialize the useNavigate hook
+    const navigate = useNavigate();
 
-    const handleSignUp = (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
         setError(null);
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                console.log('Signed up user:', userCredential.user);
-                navigate('/signup/register'); // Navigate to the register page after signup
-            })
-            .catch((error) => {
-                console.error('Error signing up:', error);
-                setError('Could not create account. Try again.');
-            });
+        try {
+            // Create Firebase user
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const firebaseUid = userCredential.user.uid;
+
+            // Store Firebase UID in local storage temporarily
+            localStorage.setItem('firebaseUid', firebaseUid);
+
+            // Navigate to QR generator
+            navigate('/signup/register');
+        } catch (error) {
+            console.error('Error signing up:', error);
+            setError('Could not create account. Try again.');
+        }
     };
 
     return (

@@ -1,25 +1,48 @@
-import React, { useState } from 'react';
+
 import { SnackbarProvider } from 'notistack';
 import Sidebar from '../components/SideBar';
 import Navbar from '../components/utility/Navbar';
 import Breadcrumb from '../components/utility/Breadcrumbs';
 import BackButton from '../components/utility/BackButton';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const ProfilePage = () => {
-  const [profileData] = useState({
-    firstName: 'Ash',
-    lastName: 'Kuruppu',
-    dob: '02/04/2000',
-    gender: 'Male',
-    email: 'win@gmail.com',
-    phone: '071 8430626',
-    address: 'No:23,Kadawatha Rd,Gampaha',
-    insuranceNumber: '2470168704557151',
-    physician: 'Dr. Perera',
-    medicalHistory: '',
-    bloodType: 'O+',
-    emergencyContact: '071 8127918',
-  });
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          // Fetch user data from MongoDB using Firebase UID
+          const response = await fetch(`https://carenet-vercel.vercel.app/patientRoute/patients/firebase/${user.uid}`);
+
+          if (response.ok) {
+            const userData = await response.json();
+            setProfileData(userData);
+          } else {
+            navigate('/login');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          navigate('/login');
+        }
+      } else {
+        navigate('/login');
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const breadcrumbItems = [
     { name: 'Profile', href: '/profile' },

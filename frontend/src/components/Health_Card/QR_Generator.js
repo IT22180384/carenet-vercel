@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../../firebaseConfig';
 
 const QR_Generator = () => {
     const [formData, setFormData] = useState({
@@ -28,18 +29,30 @@ const QR_Generator = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            const response = await fetch('https://health-care-system-csse.vercel.app/patientRoute', {
+            // Get Firebase UID from local storage
+            const firebaseUid = localStorage.getItem('firebaseUid');
+
+            if (!firebaseUid) {
+                throw new Error('No Firebase UID found');
+            }
+
+            const response = await fetch('https://carenet-vercel.vercel.app/patientRoute', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    firebaseUid, // Add Firebase UID to patient data
+                }),
             });
 
             const data = await response.json();
             if (response.ok) {
                 console.log('Patient registered:', data.patient);
+                localStorage.removeItem('firebaseUid'); // Clean up
                 alert(`Patient registered successfully! Unique ID: ${data.patient.U_id}`);
                 navigate(`/generate-qr/${data.patient.U_id}`);
             } else {
@@ -50,6 +63,7 @@ const QR_Generator = () => {
             alert('An error occurred while registering the patient.');
         }
     };
+
 
     return (
         <div className="min-h-screen flex flex-col  bg-white">

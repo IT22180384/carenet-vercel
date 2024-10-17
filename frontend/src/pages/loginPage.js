@@ -1,26 +1,39 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebaseConfig'; // Update the path to firebaseConfig.js
+import { auth } from '../firebaseConfig';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        setError(null); // Clear previous errors
+        setError(null);
 
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                console.log('Logged in user:', userCredential.user);
-                // Redirect or perform additional actions after login
-            })
-            .catch((error) => {
-                console.error('Error logging in:', error);
-                setError('Invalid email or password');
-            });
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Store the user's email in localStorage
+            localStorage.setItem('userEmail', user.email);
+
+            // Check if user is admin
+            const isAdmin = user.email === 'susadisandanima@gmail.com';
+            localStorage.setItem('isAdmin', isAdmin);
+
+            // Navigate based on user role
+            if (isAdmin) {
+                navigate('/dashboard');
+            } else {
+                navigate('/profile');
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+            setError('Invalid email or password');
+        }
     };
 
     return (
