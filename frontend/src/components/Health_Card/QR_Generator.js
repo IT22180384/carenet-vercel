@@ -223,5 +223,4 @@ const QR_Generator = () => {
         </div>
     );
 };
-
 export default QR_Generator;
