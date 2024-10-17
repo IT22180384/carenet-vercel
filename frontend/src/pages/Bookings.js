@@ -370,5 +370,4 @@ const Bookings = () => {
       </SnackbarProvider>
   );
 };
-
 export default Bookings;
