@@ -4,12 +4,16 @@ import SideBar from "../components/SideBar";
 import Navbar from "../components/utility/Navbar";
 import Breadcrumb from "../components/utility/Breadcrumbs";
 import BackButton from "../components/utility/BackButton";
+import { auth } from "../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 
 const AddAppointment = () => {
   const { state } = useLocation(); // Access the service data passed via navigation
   const service = state?.service || {}; // Get service data if available
 
   const [formData, setFormData] = useState({
+    patientId: "",
+    serviceId: service._id || "", // Add serviceId from the service data
     appointmentDate: "",
     time: "",
     appointmentReason: service.title || "", // Pre-fill with service title if available
@@ -21,6 +25,22 @@ const AddAppointment = () => {
   const [doctors, setDoctors] = useState([]); // State to hold doctor data
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  // Fetch the current user's UID and set it as the patientId
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setFormData((prevData) => ({
+          ...prevData,
+          patientId: user.uid, // Set the patient's UID from Firebase Authentication
+        }));
+      } else {
+        navigate("/login"); // Redirect to login if no user is logged in
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup the subscription
+  }, [navigate]);
 
   // Fetch doctors from the API
   useEffect(() => {
@@ -89,7 +109,7 @@ const AddAppointment = () => {
 
         if (!response.ok) throw new Error("Failed to create appointment");
 
-        navigate("/services/home"); // Redirect back to services page
+        navigate("/ServiceView"); // Redirect back to services page
       } catch (error) {
         console.error("Error creating appointment:", error);
       }
@@ -98,7 +118,7 @@ const AddAppointment = () => {
 
   // Breadcrumb for navigation
   const breadcrumbItems = [
-    { name: "Services", href: "/services/home" },
+    { name: "Services", href: "/ServiceView" },
     { name: "Add Appointment", href: "/add-appointment" },
   ];
 
@@ -204,8 +224,7 @@ const AddAppointment = () => {
                     errors.location ? "border-red-500" : "border-green-500"
                   } rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
-                  <option value="">Select a location</option>{" "}
-                  {/* Default option */}
+                  <option value="">Select a location</option>
                   <option value="Matara General Hospital">
                     Matara General Hospital
                   </option>
@@ -219,7 +238,6 @@ const AddAppointment = () => {
                   <option value="Jaffna Teaching Hospital">
                     Jaffna Teaching Hospital
                   </option>
-                  {/* Add more options as needed */}
                 </select>
                 {errors.location && (
                   <span className="text-red-500 text-sm">
@@ -278,7 +296,6 @@ const AddAppointment = () => {
             <div className="flex flex-col md:flex-row justify-between mt-4">
               <button
                 type="submit"
-                onClick={() => navigate("/PaymentPage")}
                 className="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition duration-200"
               >
                 Add Appointment

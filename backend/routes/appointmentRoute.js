@@ -17,7 +17,9 @@ const generateAppointmentId = () => {
 router.post("/", async (req, res) => {
   try {
     const {
+      patientId,
       doctorId,
+      serviceId,
       appointmentDate,
       time,
       appointmentReason,
@@ -27,7 +29,9 @@ router.post("/", async (req, res) => {
 
     // Check if all required fields are present
     if (
+      !patientId ||
       !doctorId ||
+      !serviceId ||
       !appointmentDate ||
       !time ||
       !appointmentReason ||
@@ -44,8 +48,9 @@ router.post("/", async (req, res) => {
     // Create a new appointment
     const newAppointment = await Appointment.create({
       appointmentId,
-      patientId: "670bae0072bb3d59f7c45b9e", // Fixed patientId for now
+      patientId,
       doctorId,
+      serviceId,
       appointmentDate,
       time,
       appointmentStatus: "Scheduled", // Default value

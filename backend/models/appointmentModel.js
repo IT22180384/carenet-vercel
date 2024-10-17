@@ -8,8 +8,13 @@ const appointmentSchema = new mongoose.Schema(
       required: true,
       unique: true, // Ensures that each appointment has a unique ID
     },
-    patientId: {
+    serviceId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "Service", // Reference to the Service model
+      required: true,
+    },
+    patientId: {
+      type: String,
       ref: "Patient", // Reference to the Patient model
       required: true,
     },
