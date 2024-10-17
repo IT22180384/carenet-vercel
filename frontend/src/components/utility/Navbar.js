@@ -7,14 +7,17 @@ import { signOut } from 'firebase/auth';
 export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
                 setUser(user);
+                setIsAdmin(user.email === 'susadisandanima@gmail.com');
             } else {
                 setUser(null);
+                setIsAdmin(false);
             }
         });
 
@@ -32,6 +35,15 @@ export default function Navbar() {
         }
     };
 
+    const handleDashboardClick = (e) => {
+        e.preventDefault();
+        if (isAdmin) {
+            navigate('/dashboard');
+        } else {
+            navigate('/profile');
+        }
+    };
+
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!mobileMenuOpen);
     };
@@ -39,7 +51,6 @@ export default function Navbar() {
     // Function to get display name
     const getDisplayName = () => {
         if (user) {
-            // Get username part from email (before @)
             return user.email.split('@')[0];
         }
         return '';
@@ -65,11 +76,11 @@ export default function Navbar() {
                             Home
                         </div>
                     </Link>
-                    <Link to="/dashboard" className="nav-item">
+                    <div onClick={handleDashboardClick} className="nav-item cursor-pointer">
                         <div className="h-full font-medium px-6 rounded-full transition-all duration-200 hover:bg-blue-200">
                             Dashboard
                         </div>
-                    </Link>
+                    </div>
                     <Link to="/serviceView" className="nav-item">
                         <div className="h-full font-medium px-6 rounded-full transition-all duration-200 hover:bg-blue-200">
                             Services
@@ -124,9 +135,18 @@ export default function Navbar() {
             {mobileMenuOpen && (
                 <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-md">
                     <div className="space-y-1 px-2 pb-3 pt-2">
-                        <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Home</Link>
-                        <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Dashboard</Link>
-                        <Link to="/serviceView" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Services</Link>
+                        <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+                            Home
+                        </Link>
+                        <div
+                            onClick={handleDashboardClick}
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 cursor-pointer"
+                        >
+                            Dashboard
+                        </div>
+                        <Link to="/serviceView" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+                            Services
+                        </Link>
                         {!user ? (
                             <>
                                 <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Login</Link>
