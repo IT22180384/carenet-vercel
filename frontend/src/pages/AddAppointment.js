@@ -26,7 +26,9 @@ const AddAppointment = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch("https://carenet-vercel.vercel.app/doctorRoute/");
+        const response = await fetch(
+          "https://carenet-vercel.vercel.app/doctorRoute/"
+        );
         if (!response.ok) throw new Error("Failed to fetch doctors");
         const data = await response.json();
         setDoctors(data); // Set doctors in state
@@ -115,7 +117,7 @@ const AddAppointment = () => {
             <Breadcrumb items={breadcrumbItems} />
           </div>
 
-          <h1 className="text-3xl font-bold mb-6 text-center text-teal-600">
+          <h1 className="text-3xl font-bold mb-6 text-center text-gray-700">
             Add New Appointment
           </h1>
 
@@ -193,8 +195,7 @@ const AddAppointment = () => {
                 <label className="text-sm font-semibold text-gray-700 mb-1">
                   Location
                 </label>
-                <input
-                  type="text"
+                <select
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
@@ -202,7 +203,24 @@ const AddAppointment = () => {
                   className={`mt-1 border ${
                     errors.location ? "border-red-500" : "border-green-500"
                   } rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                />
+                >
+                  <option value="">Select a location</option>{" "}
+                  {/* Default option */}
+                  <option value="Matara General Hospital">
+                    Matara General Hospital
+                  </option>
+                  <option value="Colombo Hospital">Colombo Hospital</option>
+                  <option value="Kandy Teaching Hospital">
+                    Kandy Teaching Hospital
+                  </option>
+                  <option value="Galle General Hospital">
+                    Galle General Hospital
+                  </option>
+                  <option value="Jaffna Teaching Hospital">
+                    Jaffna Teaching Hospital
+                  </option>
+                  {/* Add more options as needed */}
+                </select>
                 {errors.location && (
                   <span className="text-red-500 text-sm">
                     {errors.location}
