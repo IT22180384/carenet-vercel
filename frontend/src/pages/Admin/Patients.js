@@ -63,8 +63,6 @@ const Patients = () => {
     };
 
 
-
-
     const handleEdit = (patient) => {
         setEditMode(true);
         setCurrentPatient(patient);
