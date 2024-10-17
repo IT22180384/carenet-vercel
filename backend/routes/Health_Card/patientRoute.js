@@ -19,19 +19,35 @@ const generateUniqueId = async () => {
     }
 };
 
+router.get('/patients/firebase/:firebaseUid', async (req, res) => {
+    try {
+        const { firebaseUid } = req.params;
+        const patient = await Patient.findOne({ firebaseUid });
+
+        if (!patient) {
+            return res.status(404).json({ message: 'Patient not found' });
+        }
+
+        res.json(patient);
+    } catch (error) {
+        console.error('Error fetching patient:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Create a new patient and return QR code data
 router.post('/', async (req, res) => {
     try {
         const {
             firstName, lastName, dob, gender, email, phone,
             address, insuranceNumber, physician, medicalHistory,
-            bloodType, emergencyContact
+            bloodType, emergencyContact, firebaseUid // Add firebaseUid to destructuring
         } = req.body;
 
         // Check if all required fields are present
         if (!firstName || !lastName || !dob || !gender || !email || !phone ||
             !address || !insuranceNumber || !physician || !medicalHistory ||
-            !bloodType || !emergencyContact) {
+            !bloodType || !emergencyContact || !firebaseUid) {
             return res.status(400).json({
                 message: 'All required fields must be provided',
             });
@@ -40,15 +56,25 @@ router.post('/', async (req, res) => {
         // Generate a unique U_id
         const U_id = await generateUniqueId();
 
-        // Create a new patient
+        // Create a new patient with Firebase UID
         const newPatient = await Patient.create({
-            U_id, firstName, lastName, dob, gender, email, phone,
-            address, insuranceNumber, physician, medicalHistory,
-            bloodType, emergencyContact
+            U_id,
+            firebaseUid,
+            firstName,
+            lastName,
+            dob,
+            gender,
+            email,
+            phone,
+            address,
+            insuranceNumber,
+            physician,
+            medicalHistory,
+            bloodType,
+            emergencyContact
         });
 
-        // Return newly created patient and a QR data string
-        const qrData = JSON.stringify(newPatient); // QR data as a string
+        const qrData = JSON.stringify(newPatient);
         return res.status(201).json({
             patient: newPatient,
             qrData
@@ -134,3 +160,4 @@ router.put('/patients/:U_id', async (req, res) => {
 
 
 export default router;
+
