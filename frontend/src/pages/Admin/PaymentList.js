@@ -134,5 +134,4 @@ const PaymentList = () => {
         </SnackbarProvider>
     );
 };
-
 export default PaymentList;
