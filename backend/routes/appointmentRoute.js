@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { Appointment } from "../models/appointmentModel.js";
+import { Service } from "../models/serviceModel.js";
 
 const router = express.Router();
 
@@ -17,7 +18,9 @@ const generateAppointmentId = () => {
 router.post("/", async (req, res) => {
   try {
     const {
+      patientId,
       doctorId,
+      serviceId,
       appointmentDate,
       time,
       appointmentReason,
@@ -25,9 +28,10 @@ router.post("/", async (req, res) => {
       notes,
     } = req.body;
 
-    // Check if all required fields are present
     if (
+      !patientId ||
       !doctorId ||
+      !serviceId ||
       !appointmentDate ||
       !time ||
       !appointmentReason ||
@@ -44,15 +48,16 @@ router.post("/", async (req, res) => {
     // Create a new appointment
     const newAppointment = await Appointment.create({
       appointmentId,
-      patientId: "670bae0072bb3d59f7c45b9e", // Fixed patientId for now
+      patientId,
       doctorId,
+      serviceId,
       appointmentDate,
       time,
-      appointmentStatus: "Scheduled", // Default value
+      appointmentStatus: "Scheduled",
       appointmentReason,
       location,
       notes,
-      paymentStatus: "Pending", // Default value
+      paymentStatus: "Pending",
     });
 
     // Return newly created appointment
@@ -64,6 +69,27 @@ router.post("/", async (req, res) => {
     if (error instanceof mongoose.Error.ValidationError) {
       return res.status(400).json({ message: error.message });
     }
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// New Route to fetch all appointments by patientId and populate service price
+router.get("/appointments/patient/:patientId", async (req, res) => {
+  const { patientId } = req.params;
+
+  try {
+    const appointments = await Appointment.find({ patientId }) // Find appointments by patientId
+      .populate("serviceId", "price"); // Populate the serviceId and only fetch the price field
+
+    if (!appointments.length) {
+      return res
+        .status(404)
+        .json({ message: "No appointments found for this patient" });
+    }
+
+    res.json(appointments);
+  } catch (error) {
+    console.error("Error fetching appointments by patientId:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -86,7 +112,6 @@ router.get("/appointments/:id", async (req, res) => {
   try {
     const appointment = await Appointment.findById(id);
 
-    // Check if appointment was found
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
@@ -105,12 +130,10 @@ router.delete("/appointments/:id", async (req, res) => {
   try {
     const deletedAppointment = await Appointment.findByIdAndDelete(id);
 
-    // Check if an appointment was found and deleted
     if (!deletedAppointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
 
-    // Respond with success message
     res.status(200).json({ message: "Appointment deleted successfully" });
   } catch (error) {
     console.error("Error deleting appointment:", error);
