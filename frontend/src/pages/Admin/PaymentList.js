@@ -43,10 +43,7 @@ const PaymentList = () => {
         return date.toLocaleDateString('en-GB'); // Format as DD/MM/YYYY
     };
 
-    const formatTime = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric', hour12: true }); // Format as HH:MM AM/PM
-    };
+  
 
     const filteredPayments = payments.filter(payment =>
         payment.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -121,7 +118,7 @@ const PaymentList = () => {
                                                         <td className="px-6 py-4">{payment.name}</td>
                                                         <td className="px-6 py-4">{formatPrice(payment.price)}</td>
                                                         <td className="px-6 py-4">{formatDate(payment.date)}</td>
-                                                        <td className="px-6 py-4">{formatTime(payment.date)}</td>
+                                                        <td className="px-6 py-4">{payment.paymentDate}</td>
                                                         <td className="px-6 py-4">
                                                            Paid
                                                         </td>

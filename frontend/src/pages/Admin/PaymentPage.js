@@ -18,8 +18,7 @@ const PaymentPage = () => {
     const handlePayment = async (e) => {
         e.preventDefault();
     
-        // Capture the current date and time
-        const currentDateTime = new Date(); // Get current date and time
+        const currentDateTime = new Date();
     
         const paymentData = {
             paymentMethod,
@@ -28,11 +27,13 @@ const PaymentPage = () => {
             expiryMonth,
             expiryYear,
             securityCode,
-            paymentDate: currentDateTime.toISOString(), // Store as ISO string
+            paymentDate: currentDateTime.toISOString(), // ISO format
         };
     
+        console.log('Payment Data:', paymentData); // Log payment data for debugging
+    
         try {
-            setLoading(true); // Start loading
+            setLoading(true);
             const response = await fetch('https://carenet-vercel.vercel.app/paymentRoute/payment', {
                 method: 'POST',
                 headers: {
@@ -45,13 +46,6 @@ const PaymentPage = () => {
     
             if (response.ok) {
                 enqueueSnackbar('Payment successful!', { variant: 'success' });
-                // Clear form after successful payment
-                setPaymentMethod('credit');
-                setName('');
-                setCardNumber('');
-                setExpiryMonth('01');
-                setExpiryYear('2024');
-                setSecurityCode('');
             } else {
                 enqueueSnackbar(`Error: ${data.message}`, { variant: 'error' });
             }
@@ -59,9 +53,10 @@ const PaymentPage = () => {
             console.error('Payment Error:', error);
             enqueueSnackbar('An error occurred during payment.', { variant: 'error' });
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
+    
     
 
     const breadcrumbItems = [
