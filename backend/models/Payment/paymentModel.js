@@ -36,6 +36,5 @@ const paymentSchema = new mongoose.Schema({
         required: true,
     },
 });
-
 // Export the Payment model
 export const Payment = mongoose.model('Payment', paymentSchema);
