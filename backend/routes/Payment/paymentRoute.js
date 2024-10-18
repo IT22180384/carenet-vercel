@@ -63,4 +63,5 @@ router.get('/payments', async (req, res) => {
         res.status(500).json({ message: 'Error retrieving payments' });
     }
 });
+
 export default router;
