@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const paymentSchema = new mongoose.Schema({
-    paymentMethod : {
+    paymentMethod: {
         type: String,
         required: true,
     },
@@ -25,9 +25,17 @@ const paymentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    paymentDate: { // New field to store payment date
-        type: Date, // Use Date type for storing date and time
+    paymentDate: {
+        type: Date,
+        required: true,
+        default: Date.now, // Automatically sets the payment date to the current date
+    },
+    appointmentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Appointment", // Reference to Appointment model
         required: true,
     },
 });
+
+// Export the Payment model
 export const Payment = mongoose.model('Payment', paymentSchema);

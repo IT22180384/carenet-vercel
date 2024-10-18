@@ -4,6 +4,7 @@ import SideBar from '../../components/SideBar';
 import Navbar from '../../components/utility/Navbar';
 import Breadcrumb from '../../components/utility/Breadcrumbs';
 import BackButton from '../../components/utility/BackButton';
+import { useLocation } from 'react-router-dom';
 
 const PaymentPage = () => {
     const { enqueueSnackbar } = useSnackbar(); // Use notistack for notifications
@@ -15,10 +16,14 @@ const PaymentPage = () => {
     const [securityCode, setSecurityCode] = useState('');
     const [loading, setLoading] = useState(false); // Loading state
 
+    const location = useLocation();
+    const appointmentId = location.state?.appointmentId;
+
     const handlePayment = async (e) => {
         e.preventDefault();
     
         const currentDateTime = new Date();
+   
     
         const paymentData = {
             paymentMethod,
@@ -28,6 +33,7 @@ const PaymentPage = () => {
             expiryYear,
             securityCode,
             paymentDate: currentDateTime.toISOString(), // ISO format
+            appointmentId 
         };
     
         console.log('Payment Data:', paymentData); // Log payment data for debugging
