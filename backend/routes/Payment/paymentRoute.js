@@ -1,7 +1,6 @@
 // routes/PaymentRoute.js
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
 import {Payment} from "../../models/Payment/paymentModel.js";// Adjust the path as necessary
 
 const router = express.Router();
@@ -23,6 +22,7 @@ router.post('/payment', async (req, res) => {
             expiryMonth,
             expiryYear,
             securityCode,
+            paymentDate: new Date(), // Ensure this line is present
         });
 
         const savedPayment = await newPayment.save();

@@ -21,6 +21,8 @@ import AddAppointment from "./pages/AddAppointment";
 
 import ProfilePage from "./pages/ProfilePage";
 import Bookings from "./pages/Bookings";
+import PaymentPage from "./pages/Admin/PaymentPage";
+import PaymentList from "./pages/Admin/PaymentList";
 
 
 export default function App() {
@@ -57,6 +59,9 @@ export default function App() {
                 <Route path="/add-appointment" element={<AddAppointment />} />
                 <Route path="/bookings/home" element={<Bookings />} />
                 <Route path="/generate-qr/:id" element={<GenerateQR />} />
+
+                <Route path="/PaymentPage" element={<PaymentPage />} />
+                <Route path="/finances/home" element={<PaymentList />} />
 
             </Routes>
         </div>

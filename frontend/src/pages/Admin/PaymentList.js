@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faFileDownload } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faFileDownload} from '@fortawesome/free-solid-svg-icons'; // Import icons here
 import { SnackbarProvider } from 'notistack';
 import SideBar from '../../components/SideBar';
 import Navbar from '../../components/utility/Navbar';
 import Breadcrumb from '../../components/utility/Breadcrumbs';
 import BackButton from '../../components/utility/BackButton';
-import 'jspdf-autotable';
+
+
 
 const PaymentList = () => {
     const [payments, setPayments] = useState([]);
@@ -34,17 +35,17 @@ const PaymentList = () => {
     }, []);
 
     const formatPrice = (price) => {
-        return `Rs.2000.00`;
+        return `Rs.2000.00`; // Replace with actual price formatting logic
     };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return `13/10/2024`; // Format as DD/MM/YYYY
+        return date.toLocaleDateString('en-GB'); // Format as DD/MM/YYYY
     };
 
     const formatTime = (dateString) => {
         const date = new Date(dateString);
-        return `2.50PM`; // Format as HH:MM AM/PM
+        return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric', hour12: true }); // Format as HH:MM AM/PM
     };
 
     const filteredPayments = payments.filter(payment =>
@@ -97,29 +98,33 @@ const PaymentList = () => {
                                     </button>
                                 </div>
                                 <div className="overflow-x-auto">
-                                    <table className="min-w-full bg-white border border-gray-300">
-                                        <thead>
-                                            <tr className="bg-gray-200">
-                                                <th className="py-2 px-4 border-b">Payment Method</th>
-                                                <th className="py-2 px-4 border-b">Name</th>
-                                                <th className="py-2 px-4 border-b">Price</th>
-                                                <th className="py-2 px-4 border-b">Date</th>
-                                                <th className="py-2 px-4 border-b">Time</th>
+                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 mt-10">
+                                        <thead className="text-xs text-gray-700 shadow-md uppercase bg-gray-100 border-l-4 border-gray-500">
+                                            <tr>
+                                                <th scope="col" className="px-6 py-3">Payment Method</th>
+                                                <th scope="col" className="px-6 py-3">Name</th>
+                                                <th scope="col" className="px-6 py-3">Price</th>
+                                                <th scope="col" className="px-6 py-3">Date</th>
+                                                <th scope="col" className="px-6 py-3">Time</th>
+                                                <th scope="col" className="px-6 py-3">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {filteredPayments.length === 0 ? (
                                                 <tr>
-                                                    <td colSpan="5" className="text-center py-4">No payments found.</td>
+                                                    <td colSpan="6" className="text-center py-4">No payments found.</td>
                                                 </tr>
                                             ) : (
-                                                filteredPayments.map((payment) => (
-                                                    <tr key={payment._id}>
-                                                        <td className="py-2 px-4 border-b">{payment.paymentMethod}</td>
-                                                        <td className="py-2 px-4 border-b">{payment.name}</td>
-                                                        <td className="py-2 px-4 border-b">{formatPrice(payment.price)}</td>
-                                                        <td className="py-2 px-4 border-b">{formatDate(payment.date)}</td>
-                                                        <td className="py-2 px-4 border-b">{formatTime(payment.date)}</td>
+                                                filteredPayments.map((payment, index) => (
+                                                    <tr key={payment._id} className="hover:bg-gray-100">
+                                                        <td className="px-6 py-4">{payment.paymentMethod}</td>
+                                                        <td className="px-6 py-4">{payment.name}</td>
+                                                        <td className="px-6 py-4">{formatPrice(payment.price)}</td>
+                                                        <td className="px-6 py-4">{formatDate(payment.date)}</td>
+                                                        <td className="px-6 py-4">{formatTime(payment.date)}</td>
+                                                        <td className="px-6 py-4">
+                                                           Paid
+                                                        </td>
                                                     </tr>
                                                 ))
                                             )}
@@ -134,4 +139,5 @@ const PaymentList = () => {
         </SnackbarProvider>
     );
 };
+
 export default PaymentList;

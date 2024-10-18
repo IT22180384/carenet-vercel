@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider, useSnackbar } from 'notistack';
 import SideBar from '../../components/SideBar';
 import Navbar from '../../components/utility/Navbar';
 import Breadcrumb from '../../components/utility/Breadcrumbs';
 import BackButton from '../../components/utility/BackButton';
 
 const PaymentPage = () => {
-    const [paymentMethod, setPaymentMethod] = useState('credit'); // default to credit card
+    const { enqueueSnackbar } = useSnackbar(); // Use notistack for notifications
+    const [paymentMethod, setPaymentMethod] = useState('credit');
     const [name, setName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [expiryMonth, setExpiryMonth] = useState('01');
     const [expiryYear, setExpiryYear] = useState('2024');
     const [securityCode, setSecurityCode] = useState('');
+    const [loading, setLoading] = useState(false); // Loading state
 
     const handlePayment = async (e) => {
         e.preventDefault();
-
-        // Get the current date and time
-        const paymentDate = new Date().toISOString(); // Use ISO format to store date and time in MongoDB
-
+    
+        // Capture the current date and time
+        const currentDateTime = new Date(); // Get current date and time
+    
         const paymentData = {
             paymentMethod,
             name,
@@ -26,10 +28,11 @@ const PaymentPage = () => {
             expiryMonth,
             expiryYear,
             securityCode,
-            paymentDate, // Add payment date to the data being sent to the server
+            paymentDate: currentDateTime.toISOString(), // Store as ISO string
         };
-
+    
         try {
+            setLoading(true); // Start loading
             const response = await fetch('https://carenet-vercel.vercel.app/paymentRoute/payment', {
                 method: 'POST',
                 headers: {
@@ -37,11 +40,11 @@ const PaymentPage = () => {
                 },
                 body: JSON.stringify(paymentData),
             });
-
+    
             const data = await response.json();
-
+    
             if (response.ok) {
-                alert('Payment successful!');
+                enqueueSnackbar('Payment successful!', { variant: 'success' });
                 // Clear form after successful payment
                 setPaymentMethod('credit');
                 setName('');
@@ -50,13 +53,16 @@ const PaymentPage = () => {
                 setExpiryYear('2024');
                 setSecurityCode('');
             } else {
-                alert(`Error: ${data.message}`);
+                enqueueSnackbar(`Error: ${data.message}`, { variant: 'error' });
             }
         } catch (error) {
             console.error('Payment Error:', error);
-            alert('An error occurred during payment.');
+            enqueueSnackbar('An error occurred during payment.', { variant: 'error' });
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
+    
 
     const breadcrumbItems = [
         { name: 'Patient Details', href: '/patients/home' }
@@ -180,8 +186,12 @@ const PaymentPage = () => {
                                     </div>
                                     {/* Payment Button */}
                                     <div>
-                                    <button className="block w-full bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-4 py-3 font-semibold transition duration-300">
-                                            <i className="mdi mdi-lock-outline mr-1"></i> PAY NOW
+                                        <button 
+                                            type="submit"
+                                            className="block w-full bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-4 py-3 font-semibold transition duration-300"
+                                            disabled={loading} // Disable button while loading
+                                        >
+                                            {loading ? "Processing..." : <><i className="mdi mdi-lock-outline mr-1"></i> PAY NOW</>}
                                         </button>
                                     </div>
                                 </form>

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from 'react-router-dom';
+
 import {
   faTrashAlt,
   faEdit,
@@ -26,6 +28,7 @@ const Bookings = () => {
   const [currentAppointment, setCurrentAppointment] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAppointments();
@@ -211,9 +214,9 @@ const Bookings = () => {
     );
   });
   const handlePay = (appointment) => {
-    // Implement your payment logic here
     alert(`Initiate payment process for appointment ${appointment._id}`);
-  };
+    navigate("/PaymentPage", { state: { appointmentId: appointment._id } }); 
+};
 
   const breadcrumbItems = [{ name: "Bookings", href: "/bookings/home" }];
 

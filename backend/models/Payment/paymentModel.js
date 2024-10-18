@@ -25,7 +25,10 @@ const paymentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-   
+    paymentDate: { // New field to store payment date
+        type: Date, // Use Date type for storing date and time
+        required: true,
+    },
 });
 
 export const Payment = mongoose.model('Payment', paymentSchema);
