@@ -34,22 +34,20 @@ const QRScanner = ({ selectedCamera, onUserDataScanned }) => {
             while (retryCount < maxRetries) {
                 try {
                     console.log("Fetching patient data...");
-                    console.log(U_id);
-                    const response = await axios.get('https://carenet-vercel.vercel.app/patientRoute/patients/${U_id}');
+                    const response = await axios.get(`https://carenet-vercel.vercel.app/patientRoute/patients/${U_id}`);
                     console.log("Patient data received:", response.data);
-                    console.log(response.data);
                     setUserData(response.data);
                     setSuccess("Patient data fetched successfully!");
                     onUserDataScanned(response.data);
-                    break;
+                    break;  // Stop retrying on success
                 } catch (err) {
-                    retryCount += 1;
+                    retryCount++;
                     console.error("Error fetching patient data:", err);
 
                     if (retryCount >= maxRetries) {
                         let errorMessage = "Unknown error occurred";
                         if (err.response) {
-                            errorMessage = 'Server Error: ${err.response.status} - ${err.response.statusText}';
+                            errorMessage = `Server Error: ${err.response.status} - ${err.response.statusText}`;
                             if (err.response.data && err.response.data.message) {
                                 errorMessage += ` - ${err.response.data.message}`;
                             }
@@ -58,17 +56,13 @@ const QRScanner = ({ selectedCamera, onUserDataScanned }) => {
                         } else {
                             errorMessage = err.message;
                         }
-                        setError('Error processing patient data: ${errorMessage}');
-                        break;
+                        setError(`Error processing patient data: ${errorMessage}`);
                     } else {
-                        console.log('Retrying... (${retryCount})');
+                        console.log(`Retrying... (${retryCount})`);
                         await new Promise(resolve => setTimeout(resolve, 1000));  // Wait 1 second before retrying
                     }
                 }
             }
-        } else {
-            console.error("Invalid U_id:", U_id);
-            setError("Invalid U_id provided.");
         }
     };
 
