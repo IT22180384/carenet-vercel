@@ -1,5 +1,5 @@
 import React from 'react';
-import AppointmentChartCmp from '../../components/Vinuk/AppoinmentChartCmp';
+import AppointmentChartCmp from '../../components/Vinuk/AppoinmentChartCMp';
 
 function AppoinmentChart() {
   return (
