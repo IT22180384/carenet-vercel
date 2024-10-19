@@ -7,6 +7,83 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
+import { FaUserCircle } from 'react-icons/fa'; // Import profile icon from react-icons
+
+// Composite base class
+class ProfileComponent {
+  render() {
+    throw new Error('This method should be overwritten');
+  }
+}
+
+// Leaf components
+class ProfileField extends ProfileComponent {
+  constructor({ label, value, type = 'text', readOnly = true }) {
+    super();
+    this.label = label;
+    this.value = value;
+    this.type = type;
+    this.readOnly = readOnly;
+  }
+
+  render() {
+    return (
+      <div>
+        <label className="block text-sm font-semibold text-gray-600">{this.label}</label>
+        <input
+          type={this.type}
+          value={this.value}
+          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          readOnly={this.readOnly}
+        />
+      </div>
+    );
+  }
+}
+
+class ProfileTextArea extends ProfileComponent {
+  constructor({ label, value, readOnly = true }) {
+    super();
+    this.label = label;
+    this.value = value;
+    this.readOnly = readOnly;
+  }
+
+  render() {
+    return (
+      <div>
+        <label className="block text-sm font-semibold text-gray-600">{this.label}</label>
+        <textarea
+          value={this.value}
+          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          readOnly={this.readOnly}
+        />
+      </div>
+    );
+  }
+}
+
+// Composite class that can contain other components
+class ProfileComposite extends ProfileComponent {
+  constructor() {
+    super();
+    this.components = [];
+  }
+
+  add(component) {
+    this.components.push(component);
+  }
+
+  render() {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+        {this.components.map((component, index) => (
+          <div key={index}>{component.render()}</div>
+        ))}
+      </div>
+    );
+  }
+}
 
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState(null);
@@ -42,198 +119,72 @@ const ProfilePage = () => {
     return <div>Loading...</div>;
   }
 
-  const breadcrumbItems = [
-    { name: 'Profile', href: '/profile' },
-  ];
+  const breadcrumbItems = [{ name: 'Profile', href: '/profile' }];
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  const profileComposite = new ProfileComposite();
+  profileComposite.add(new ProfileField({ label: 'First Name', value: profileData.firstName }));
+  profileComposite.add(new ProfileField({ label: 'Last Name', value: profileData.lastName }));
+  profileComposite.add(new ProfileField({ label: 'Date of Birth', value: profileData.dob, type: 'date' }));
+  profileComposite.add(new ProfileField({ label: 'Gender', value: profileData.gender }));
+  profileComposite.add(new ProfileField({ label: 'Email', value: profileData.email, type: 'email' }));
+  profileComposite.add(new ProfileField({ label: 'Phone', value: profileData.phone, type: 'tel' }));
+  profileComposite.add(new ProfileTextArea({ label: 'Address', value: profileData.address }));
+  profileComposite.add(new ProfileField({ label: 'Insurance Number', value: profileData.insuranceNumber }));
+  profileComposite.add(new ProfileField({ label: 'Physician', value: profileData.physician }));
+  profileComposite.add(new ProfileTextArea({ label: 'Medical History', value: profileData.medicalHistory }));
+  profileComposite.add(new ProfileField({ label: 'Blood Type', value: profileData.bloodType }));
+  profileComposite.add(new ProfileField({ label: 'Emergency Contact', value: profileData.emergencyContact }));
 
   return (
-      <SnackbarProvider>
-        <div className="flex flex-col min-h-screen font-sans bg-gray-50">
-          {/* Navbar */}
-          <div className="sticky top-0 z-50">
-            <Navbar />
+    <SnackbarProvider>
+      <div className="flex flex-col min-h-screen font-sans bg-gray-50">
+        <div className="sticky top-0 z-50">
+          <Navbar />
+        </div>
+
+        <div className="flex relative">
+          <button
+            className="lg:hidden fixed top-20 left-2 z-40 p-2 rounded-md bg-gray-800 text-white"
+            onClick={toggleSidebar}
+          >
+            ☰
+          </button>
+
+          <div
+            className={`fixed lg:relative lg:block ${
+              isSidebarOpen ? 'block' : 'hidden'
+            } w-64 h-screen bg-white shadow-lg z-30`}
+          >
+            <Sidebar />
           </div>
 
-          <div className="flex relative">
-            {/* Sidebar Toggle Button for Mobile */}
-            <button
-                className="lg:hidden fixed top-20 left-2 z-40 p-2 rounded-md bg-gray-800 text-white"
-                onClick={toggleSidebar}
-            >
-              ☰
-            </button>
+          <div
+            className={`flex-1 w-full p-4 transition-all duration-300 ${
+              isSidebarOpen ? 'lg:ml-0 ml-64' : 'ml-0'
+            }`}
+          >
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-row items-center mb-4 w-full">
+                <BackButton />
+                <Breadcrumb items={breadcrumbItems} />
+              </div>
 
-            {/* Sidebar */}
-            <div className={`
-            fixed lg:relative
-            lg:block
-            ${isSidebarOpen ? 'block' : 'hidden'}
-            w-64 h-screen
-            bg-white shadow-lg
-            z-30
-          `}>
-              <Sidebar />
-            </div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Profile Information</h2>
 
-            {/* Main content */}
-            <div className={`
-            flex-1
-            w-full
-            p-4
-            transition-all
-            duration-300
-            ${isSidebarOpen ? 'lg:ml-0 ml-64' : 'ml-0'}
-          `}>
-              <div className="max-w-7xl mx-auto">
-                <div className="flex flex-row items-center mb-4 w-full">
-                  <BackButton />
-                  <Breadcrumb items={breadcrumbItems} />
-                </div>
-
-                <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Profile Information</h2>
-
-                <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-4 md:p-8 mx-auto">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {/* First Name */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">First Name</label>
-                      <input
-                          type="text"
-                          value={profileData.firstName}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Last Name */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Last Name</label>
-                      <input
-                          type="text"
-                          value={profileData.lastName}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Date of Birth */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Date of Birth</label>
-                      <input
-                          type="date"
-                          value={profileData.dob}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Gender */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Gender</label>
-                      <input
-                          type="text"
-                          value={profileData.gender}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Email</label>
-                      <input
-                          type="email"
-                          value={profileData.email}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Phone */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Phone</label>
-                      <input
-                          type="tel"
-                          value={profileData.phone}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Address */}
-                    <div className="sm:col-span-2">
-                      <label className="block text-sm font-semibold text-gray-600">Address</label>
-                      <textarea
-                          value={profileData.address}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Insurance Number */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Insurance Number</label>
-                      <input
-                          type="text"
-                          value={profileData.insuranceNumber}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Physician */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Physician</label>
-                      <input
-                          type="text"
-                          value={profileData.physician}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Medical History */}
-                    <div className="sm:col-span-2">
-                      <label className="block text-sm font-semibold text-gray-600">Medical History</label>
-                      <textarea
-                          value={profileData.medicalHistory}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Blood Type */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Blood Type</label>
-                      <input
-                          type="text"
-                          value={profileData.bloodType}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
-
-                    {/* Emergency Contact */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-600">Emergency Contact</label>
-                      <input
-                          type="tel"
-                          value={profileData.emergencyContact}
-                          className="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          readOnly
-                      />
-                    </div>
+              <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-4 md:p-8 mx-auto">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center space-x-4 mb-6">
+                    <FaUserCircle className="text-blue-600 text-6xl" />
                   </div>
+                  {profileComposite.render()}
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </SnackbarProvider>
+      </div>
+    </SnackbarProvider>
   );
 };
 
