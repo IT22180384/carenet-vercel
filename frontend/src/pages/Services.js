@@ -45,6 +45,10 @@ const Services = () => {
     setEditMode(true);
   };
 
+  const handleAddService = () => {
+    navigate("/add-service"); // Navigate to AddService page
+  };
+
   const handleServiceUpdate = async (updatedService) => {
     try {
       const response = await fetch(
@@ -112,9 +116,15 @@ const Services = () => {
               <BackButton />
               <Breadcrumb items={breadcrumbItems} />
             </div>
-            <h1 className="text-3xl font-bold text-blue-600">
+            <h1 className="text-3xl font-bold text-gray-600">
               Available Services
             </h1>
+            <button
+              onClick={handleAddService}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-200"
+            >
+              Add Service
+            </button>
           </div>
 
           {error && <p className="text-red-500 mb-4">{error}</p>}

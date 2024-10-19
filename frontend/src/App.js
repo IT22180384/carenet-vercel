@@ -23,47 +23,44 @@ import ProfilePage from "./pages/ProfilePage";
 import Bookings from "./pages/Bookings";
 import PaymentPage from "./pages/Admin/PaymentPage";
 import PaymentList from "./pages/Admin/PaymentList";
-
+import AddService from "./pages/AddService";
 
 export default function App() {
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 100);
-        return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
-    return (
-        <div className="App">
-            <Routes>
-                {/* Default route */}
-                <Route path="/" element={<LandingPage />} />
-                {/* Dashboard route */}
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/signUp" element={<SignUpPage />} />
-                <Route path="/QR_Scanner/home" element={<QR_Page />} />
-                <Route path="/signup/register" element={<RegPage />} />{" "}
-                {/* Updated here */}
-                <Route path="/patients/home" element={<Patients />} />
-                <Route path="/generate-qr/:id" element={<GenerateQR />} />
-                <Route path="/appointments/home" element={<Appointments />} />
-                <Route path="/services/home" element={<Services />} />
-
-                <Route path="/DoctorsNames" element={<Doctors />} />
-
-                <Route path="/ServiceView" element={<ServiceView />} />
-                <Route path="/add-appointment" element={<AddAppointment />} />
-                <Route path="/bookings/home" element={<Bookings />} />
-                <Route path="/generate-qr/:id" element={<GenerateQR />} />
-
-                <Route path="/PaymentPage" element={<PaymentPage />} />
-                <Route path="/finances/home" element={<PaymentList />} />
-
-            </Routes>
-        </div>
-    );
+  return (
+    <div className="App">
+      <Routes>
+        {/* Default route */}
+        <Route path="/" element={<LandingPage />} />
+        {/* Dashboard route */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/signUp" element={<SignUpPage />} />
+        <Route path="/QR_Scanner/home" element={<QR_Page />} />
+        <Route path="/signup/register" element={<RegPage />} />{" "}
+        {/* Updated here */}
+        <Route path="/patients/home" element={<Patients />} />
+        <Route path="/generate-qr/:id" element={<GenerateQR />} />
+        <Route path="/appointments/home" element={<Appointments />} />
+        <Route path="/services/home" element={<Services />} />
+        <Route path="/DoctorsNames" element={<Doctors />} />
+        <Route path="/ServiceView" element={<ServiceView />} />
+        <Route path="/add-appointment" element={<AddAppointment />} />
+        <Route path="/bookings/home" element={<Bookings />} />
+        <Route path="/generate-qr/:id" element={<GenerateQR />} />
+        <Route path="/PaymentPage" element={<PaymentPage />} />
+        <Route path="/finances/home" element={<PaymentList />} />
+        <Route path="/add-service" element={<AddService />} />
+      </Routes>
+    </div>
+  );
 }

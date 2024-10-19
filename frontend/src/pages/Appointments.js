@@ -334,7 +334,7 @@ const Appointments = () => {
                           Location
                         </th>
                         <th scope="col" className="px-6 py-3">
-                          Patient
+                          Appointment
                         </th>
                         <th scope="col" className="px-6 py-3">
                           Doctor
@@ -362,7 +362,9 @@ const Appointments = () => {
                             {appointment.appointmentReason}
                           </td>
                           <td className="px-6 py-4">{appointment.location}</td>
-                          <td className="px-6 py-4">{ appointment.patientId}</td>
+                          <td className="px-6 py-4">
+                            {appointment.appointmentId}
+                          </td>
                           <td className="px-6 py-4">
                             {getDoctorName(appointment.doctorId)}
                           </td>
