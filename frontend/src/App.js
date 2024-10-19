@@ -24,6 +24,8 @@ import Bookings from "./pages/Bookings";
 import PaymentPage from "./pages/Admin/PaymentPage";
 import PaymentList from "./pages/Admin/PaymentList";
 import AddService from "./pages/AddService";
+import UserFlowChart from "./pages/Admin/UserFlowChart"
+import AppoinmentChart from "./pages/Admin/AppoinmentChart"
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -60,6 +62,8 @@ export default function App() {
         <Route path="/PaymentPage" element={<PaymentPage />} />
         <Route path="/finances/home" element={<PaymentList />} />
         <Route path="/add-service" element={<AddService />} />
+        <Route path="/home/userflowchart" element={<UserFlowChart />}/>
+        <Route path="/home/appoinmentchart" element={<AppoinmentChart />}/>
       </Routes>
     </div>
   );

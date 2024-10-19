@@ -5,8 +5,8 @@ import SideBar from "../components/SideBar";
 import Navbar from "../components/utility/Navbar";
 import BackButton from "../components/utility/BackButton";
 import Breadcrumb from "../components/utility/Breadcrumbs";
-import Appointment from "../components/Vinuk/Appoinment";
-import UserFlowChart from "../components/Vinuk/UserFlowChart";
+import AppoinmetCard from "../components/Vinuk/Cards/AppoinmentsCard";
+import UserFlowCard from "../components/Vinuk/Cards/UserFlowCard";
 
 export default function Dashboard() {
     const [loading, setLoading] = useState(false);
@@ -95,18 +95,13 @@ export default function Dashboard() {
                             </div>
 
                             {/* Charts Section */}
-                            <div className="space-y-10">
-                                {/* Appointment Chart */}
-                                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
-                                    <div className="w-full max-w-4xl mx-auto">
-                                        <Appointment />
+                            <div className="">
+                                <div className="flex flex-row justify-center items-center min-h-screen space-x-40">
+                                    <div>
+                                        <AppoinmetCard />
                                     </div>
-                                </div>
-
-                                {/* User Flow Chart */}
-                                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
-                                    <div className="w-full max-w-4xl mx-auto h-[500px] sm:h-[800px]">
-                                        <UserFlowChart />
+                                    <div>
+                                        <UserFlowCard />
                                     </div>
                                 </div>
                             </div>
