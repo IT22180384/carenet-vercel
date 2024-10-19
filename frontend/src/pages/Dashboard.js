@@ -5,8 +5,8 @@ import SideBar from "../components/SideBar";
 import Navbar from "../components/utility/Navbar";
 import BackButton from "../components/utility/BackButton";
 import Breadcrumb from "../components/utility/Breadcrumbs";
-import AppoinmetCard from "../components/Vinuk/Cards/AppoinmentsCard";
-import UserFlowCard from "../components/Vinuk/Cards/UserFlowCard";
+import AppoinmetCard from "../components/Vinuk/AppoinmentCard";
+import UserFlowCard from "../components/Vinuk/UserFlowCard";
 
 export default function Dashboard() {
     const [loading, setLoading] = useState(false);
