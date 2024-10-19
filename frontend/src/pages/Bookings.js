@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from 'react-router-dom';
-
 import {
   faTrashAlt,
   faEdit,
@@ -18,6 +16,8 @@ import Navbar from "../components/utility/Navbar";
 import Breadcrumb from "../components/utility/Breadcrumbs";
 import BackButton from "../components/utility/BackButton";
 import AppointmentForm from "../components/Tharushi/AppointmentForm";
+import { auth } from "../firebaseConfig"; // Import Firebase auth
+import { onAuthStateChanged } from "firebase/auth"; // Firebase function to detect auth changes
 
 const Bookings = () => {
   const [appointments, setAppointments] = useState([]);
@@ -28,26 +28,37 @@ const Bookings = () => {
   const [currentAppointment, setCurrentAppointment] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchAppointments();
-    fetchDoctors();
+    // Watch for auth state change to get the user's UID
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchAppointments(user.uid); // Fetch appointments by the patient's UID
+      } else {
+        // Handle if no user is logged in
+        setError("User not authenticated");
+        setLoading(false);
+      }
+    });
+
+    fetchDoctors(); // Fetch doctors' data
+    return () => unsubscribe(); // Cleanup subscription
   }, []);
 
-  const fetchAppointments = async () => {
+  // Fetch appointments by patientId (user.uid)
+  const fetchAppointments = async (uid) => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://carenet-vercel.vercel.app/appointmentRoute/appointments"
+       ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/patient/${uid}`
       );
-      if (!response.ok) throw new Error("Failed to fetch bookings");
+      if (!response.ok) throw new Error("Failed to fetch appointments");
       const data = await response.json();
       setAppointments(data);
     } catch (error) {
-      console.error("Error fetching bookings:", error);
-      setError("Failed to fetch bookings. Please try again.");
-      enqueueSnackbar("Failed to fetch bookings", { variant: "error" });
+      console.error("Error fetching appointments:", error);
+      setError("Failed to fetch appointments. Please try again.");
+      enqueueSnackbar("Failed to fetch appointments", { variant: "error" });
     } finally {
       setLoading(false);
     }
@@ -76,7 +87,7 @@ const Bookings = () => {
     if (window.confirm("Are you sure you want to delete this booking?")) {
       try {
         const response = await fetch(
-          `https://carenet-vercel.vercel.app/appointmentRoute/appointments/${id}`,
+         ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/${id}`,
           {
             method: "DELETE",
           }
@@ -104,7 +115,7 @@ const Bookings = () => {
   const handleUpdate = async (updatedData) => {
     try {
       const response = await fetch(
-        `https://carenet-vercel.vercel.app/appointmentRoute/appointments/${currentAppointment._id}`,
+       ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/${currentAppointment._id}`,
         {
           method: "PUT",
           headers: {
@@ -209,14 +220,14 @@ const Bookings = () => {
     const search = searchTerm.toLowerCase();
 
     return (
-      (patientName.includes(search) || doctorName.includes(search)) &&
-      appointment.paymentStatus === "Paid"
+      patientName.includes(search) || doctorName.includes(search)
     );
   });
+
   const handlePay = (appointment) => {
+    // Implement your payment logic here
     alert(`Initiate payment process for appointment ${appointment._id}`);
-    navigate("/PaymentPage", { state: { appointmentId: appointment._id } }); 
-};
+  };
 
   const breadcrumbItems = [{ name: "Bookings", href: "/bookings/home" }];
 
@@ -300,7 +311,6 @@ const Bookings = () => {
                         <th scope="col" className="px-6 py-3">
                           Time
                         </th>
-
                         <th scope="col" className="px-6 py-3">
                           Reason
                         </th>
@@ -313,7 +323,6 @@ const Bookings = () => {
                         <th scope="col" className="px-6 py-3">
                           Doctor
                         </th>
-
                         <th scope="col" className="px-6 py-3">
                           Actions
                         </th>
@@ -327,7 +336,6 @@ const Bookings = () => {
                             {formatDate(appointment.appointmentDate)}
                           </td>
                           <td className="px-6 py-4">{appointment.time}</td>
-
                           <td className="px-6 py-4">
                             {appointment.appointmentReason}
                           </td>
@@ -340,13 +348,14 @@ const Bookings = () => {
                           <td className="px-6 py-4">
                             {getDoctorName(appointment.doctorId)}
                           </td>
-
                           <td className="px-6 py-4">
                             <div className="flex space-x-2">
                               <button
                                 onClick={() => handleDelete(appointment._id)}
                               >
-                                <FontAwesomeIcon className="text-red-600 hover:text-red-800" />
+                                <FontAwesomeIcon
+                                  className="text-red-600 hover:text-red-800"
+                                />
                                 <FontAwesomeIcon icon={faTrash} /> Delete
                               </button>
                               <button
@@ -370,4 +379,5 @@ const Bookings = () => {
     </SnackbarProvider>
   );
 };
+
 export default Bookings;
