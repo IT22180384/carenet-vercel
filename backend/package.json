@@ -17,7 +17,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
-    "mongoose": "^8.6.3",
+    "mongodb": "^5.9.0",
+    "mongodb-memory-server-core": "^10.1.2",
+    "mongoose": "^7.6.2",
     "vercel": "^37.7.0"
   },
   "devDependencies": {
@@ -35,10 +37,15 @@
       "^.+\\.js$": "babel-jest"
     },
     "testEnvironment": "node",
-    "testMatch": ["**/__tests__/**/*.test.js"],
-    "setupFilesAfterEnv": ["./__tests__/setup/testSetup.js"],
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ],
+    "setupFilesAfterEnv": [
+      "./__tests__/setup/testSetup.js"
+    ],
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"
-    }
+    },
+    "moduleFileExtensions": ["js", "mjs", "json", "node"]
   }
 }

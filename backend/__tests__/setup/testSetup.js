@@ -1,17 +1,17 @@
 // __tests__/setup/testSetup.js
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryServer } from 'mongodb-memory-server-core';
 
 let mongoServer;
 
-// Setup before all tests
+// Setup before all __tests__
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = await mongoServer.getUri();
     await mongoose.connect(mongoUri);
 });
 
-// Cleanup after all tests are done
+// Cleanup after all __tests__ are done
 afterAll(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
