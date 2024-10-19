@@ -18,6 +18,7 @@ import BackButton from "../components/utility/BackButton";
 import AppointmentForm from "../components/Tharushi/AppointmentForm";
 import { auth } from "../firebaseConfig"; // Import Firebase auth
 import { onAuthStateChanged } from "firebase/auth"; // Firebase function to detect auth changes
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Bookings = () => {
   const [appointments, setAppointments] = useState([]);
@@ -29,7 +30,9 @@ const Bookings = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { enqueueSnackbar } = useSnackbar();
 
-  console.log("appointments",appointments);
+  const navigate = useNavigate();
+
+  console.log("appointments", appointments);
 
   useEffect(() => {
     // Watch for auth state change to get the user's UID
@@ -52,7 +55,7 @@ const Bookings = () => {
     setLoading(true);
     try {
       const response = await fetch(
-       ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/patient/${uid}`
+        ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/patient/${uid}`
       );
       if (!response.ok) throw new Error("Failed to fetch appointments");
       const data = await response.json();
@@ -64,7 +67,6 @@ const Bookings = () => {
     } finally {
       setLoading(false);
     }
-
   };
 
   const fetchDoctors = async () => {
@@ -90,7 +92,7 @@ const Bookings = () => {
     if (window.confirm("Are you sure you want to delete this booking?")) {
       try {
         const response = await fetch(
-         ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/${id}`,
+          ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/${id}`,
           {
             method: "DELETE",
           }
@@ -118,7 +120,7 @@ const Bookings = () => {
   const handleUpdate = async (updatedData) => {
     try {
       const response = await fetch(
-       ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/${currentAppointment._id}`,
+        ` https://carenet-vercel.vercel.app/appointmentRoute/appointments/${currentAppointment._id}`,
         {
           method: "PUT",
           headers: {
@@ -155,61 +157,6 @@ const Bookings = () => {
     setCurrentAppointment(null);
   };
 
-  const handleReport = () => {
-    const doc = new jsPDF("p", "mm", [297, 420]);
-
-    doc.setFontSize(18);
-    doc.text("Bookings Report", doc.internal.pageSize.getWidth() / 2, 13, {
-      align: "center",
-    });
-
-    const headers = [
-      ["Booking Date", "Time", "Reason", "Location", "Patient", "Doctor"],
-    ];
-
-    const data = appointments.map((appointment) => [
-      appointment.appointmentDate || "",
-      appointment.time || "",
-      appointment.appointmentReason || "",
-      appointment.location || "",
-      `${appointment.patientId?.firstName || ""} ${
-        appointment.patientId?.lastName || ""
-      }`,
-      getDoctorName(appointment.doctorId),
-      appointment.paymentStatus || "",
-    ]);
-
-    const tableWidth = 250;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const marginLeft = (pageWidth - tableWidth) / 2;
-
-    doc.autoTable({
-      head: headers,
-      body: data,
-      startY: 25,
-      theme: "grid",
-      styles: {
-        fontSize: 10,
-        cellPadding: 3,
-      },
-      columnStyles: {
-        0: { cellWidth: 25 },
-        1: { cellWidth: 20 },
-        2: { cellWidth: 20 },
-        3: { cellWidth: 30 },
-        4: { cellWidth: 25 },
-        5: { cellWidth: 30 },
-      },
-      headStyles: {
-        fillColor: [52, 152, 219],
-        textColor: [255, 255, 255],
-      },
-      margin: { top: 20, left: marginLeft },
-    });
-
-    doc.save("bookings_report.pdf");
-  };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
@@ -222,14 +169,17 @@ const Bookings = () => {
     const doctorName = getDoctorName(appointment.doctorId).toLowerCase();
     const search = searchTerm.toLowerCase();
 
-    return (
-      patientName.includes(search) || doctorName.includes(search)
-    );
+    return patientName.includes(search) || doctorName.includes(search);
   });
 
   const handlePay = (appointment) => {
-    // Implement your payment logic here
-    alert(`Initiate payment process for appointment ${appointment._id}`);
+    // Navigate to PaymentPage with appointmentId and price
+    navigate("/PaymentPage", {
+      state: {
+        appointmentId: appointment.appointmentId,
+        price: appointment.serviceId?.price, // Ensure the service object contains price
+      },
+    });
   };
 
   const breadcrumbItems = [{ name: "Bookings", href: "/bookings/home" }];
@@ -284,9 +234,7 @@ const Bookings = () => {
                     </div>
                   </div>
                   <div className="w-full md:w-auto">
-                    <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-2">
-                      
-                    </div>
+                    <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-2"></div>
                   </div>
                 </div>
                 {error && <p className="text-red-500">{error}</p>}
@@ -311,7 +259,7 @@ const Bookings = () => {
                         <th scope="col" className="px-6 py-3">
                           Location
                         </th>
-                        
+
                         <th scope="col" className="px-6 py-3">
                           Doctor
                         </th>
@@ -332,7 +280,7 @@ const Bookings = () => {
                             {appointment.appointmentReason}
                           </td>
                           <td className="px-6 py-4">{appointment.location}</td>
-                         
+
                           <td className="px-6 py-4">
                             {getDoctorName(appointment.doctorId)}
                           </td>
@@ -341,9 +289,7 @@ const Bookings = () => {
                               <button
                                 onClick={() => handleDelete(appointment._id)}
                               >
-                                <FontAwesomeIcon
-                                  className="text-red-600 hover:text-red-800"
-                                />
+                                <FontAwesomeIcon className="text-red-600 hover:text-red-800" />
                                 <FontAwesomeIcon icon={faTrash} /> Delete
                               </button>
                               <button
