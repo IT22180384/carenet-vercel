@@ -29,6 +29,8 @@ const Bookings = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { enqueueSnackbar } = useSnackbar();
 
+  console.log("appointments",appointments);
+
   useEffect(() => {
     // Watch for auth state change to get the user's UID
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -62,6 +64,7 @@ const Bookings = () => {
     } finally {
       setLoading(false);
     }
+
   };
 
   const fetchDoctors = async () => {
@@ -282,16 +285,7 @@ const Bookings = () => {
                   </div>
                   <div className="w-full md:w-auto">
                     <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-2">
-                      <button
-                        onClick={handleReport}
-                        className="w-full md:w-auto flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
-                      >
-                        Generate report{" "}
-                        <FontAwesomeIcon
-                          icon={faFileDownload}
-                          className="ml-1"
-                        />
-                      </button>
+                      
                     </div>
                   </div>
                 </div>
@@ -317,9 +311,7 @@ const Bookings = () => {
                         <th scope="col" className="px-6 py-3">
                           Location
                         </th>
-                        <th scope="col" className="px-6 py-3">
-                          Patient
-                        </th>
+                        
                         <th scope="col" className="px-6 py-3">
                           Doctor
                         </th>
@@ -340,11 +332,7 @@ const Bookings = () => {
                             {appointment.appointmentReason}
                           </td>
                           <td className="px-6 py-4">{appointment.location}</td>
-                          <td className="px-6 py-4">
-                            {`${appointment.patientId?.firstName || ""} ${
-                              appointment.patientId?.lastName || ""
-                            }`}
-                          </td>
+                         
                           <td className="px-6 py-4">
                             {getDoctorName(appointment.doctorId)}
                           </td>
